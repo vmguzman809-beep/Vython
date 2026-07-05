@@ -8,3 +8,4 @@ def test_alias_basicos_existen() -> None:
     assert alias["entrada"] is input
     assert alias["rango"] is range
     assert alias["longitud"] is len
+    assert callable(alias["preguntar_ia"])

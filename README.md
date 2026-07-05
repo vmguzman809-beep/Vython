@@ -80,6 +80,39 @@ imprimir(resultado)
 
 El importador de Ñython traduce el módulo `.ny` antes de cargarlo.
 
+## IA nativa opcional
+
+Ñython puede integrar IA de forma nativa sin volverla obligatoria para el lenguaje.
+
+Instala el extra:
+
+```bash
+pip install -e ".[ia]"
+```
+
+Configura tu clave:
+
+```powershell
+setx OPENAI_API_KEY "tu_clave"
+```
+
+Usa la IA desde la CLI:
+
+```bash
+nython ia preguntar "Explícame qué es un bucle"
+nython ia explicar ejemplos/condicionales.ny
+nython ia revisar ejemplos/funciones.ny
+```
+
+O desde un archivo `.ny`:
+
+```nython
+respuesta = preguntar_ia("Explícame qué hace range en Python")
+imprimir(respuesta)
+```
+
+La integración usa la API de OpenAI cuando `OPENAI_API_KEY` está configurada. El resto de Ñython funciona sin IA, sin internet y sin credenciales.
+
 ## Equivalencias iniciales
 
 | Español | Python |
@@ -171,6 +204,7 @@ vscode-extension/    base de extensión para VS Code
 - Pruebas.
 - Importador inicial para archivos `.ny`.
 - Gramática natural inicial.
+- IA nativa opcional por CLI y alias `preguntar_ia`.
 
 ### Fase 2 - VS Code
 

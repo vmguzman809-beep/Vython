@@ -6,6 +6,14 @@ from collections.abc import Callable
 from typing import Any
 
 
+def preguntar_ia(*args: Any, **kwargs: Any) -> str:
+    """Alias diferido para evitar cargar la capa IA si no se usa."""
+
+    from .ia import preguntar_ia as _preguntar_ia
+
+    return _preguntar_ia(*args, **kwargs)
+
+
 ALIAS_FUNCIONES: dict[str, Callable[..., Any] | type] = {
     "imprimir": print,
     "entrada": input,
@@ -29,6 +37,7 @@ ALIAS_FUNCIONES: dict[str, Callable[..., Any] | type] = {
     "ordenado": sorted,
     "tipo": type,
     "abrir": open,
+    "preguntar_ia": preguntar_ia,
 }
 
 

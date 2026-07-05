@@ -9,6 +9,7 @@ from pathlib import Path
 from . import __version__
 from .ejecutor import ejecutar_archivo, traducir_archivo
 from .errores import formatear_error
+from .ia import explicar_archivo, preguntar_ia, revisar_archivo
 from .utilidades import escribir_archivo_python
 
 
@@ -28,6 +29,21 @@ def crear_parser() -> argparse.ArgumentParser:
     compilar = subparsers.add_parser("compilar", help="Guarda el codigo Python generado")
     compilar.add_argument("archivo")
     compilar.add_argument("-o", "--salida", required=True)
+
+    ia = subparsers.add_parser("ia", help="Herramientas opcionales con inteligencia artificial")
+    ia_subparsers = ia.add_subparsers(dest="accion_ia")
+
+    ia_preguntar = ia_subparsers.add_parser("preguntar", help="Pregunta libre al asistente IA")
+    ia_preguntar.add_argument("pregunta")
+    ia_preguntar.add_argument("--modelo")
+
+    ia_explicar = ia_subparsers.add_parser("explicar", help="Explica un archivo Nython")
+    ia_explicar.add_argument("archivo")
+    ia_explicar.add_argument("--modelo")
+
+    ia_revisar = ia_subparsers.add_parser("revisar", help="Revisa un archivo Nython")
+    ia_revisar.add_argument("archivo")
+    ia_revisar.add_argument("--modelo")
 
     subparsers.add_parser("version", help="Muestra la version instalada")
     subparsers.add_parser("ayuda", help="Muestra esta ayuda")
@@ -59,6 +75,19 @@ def main(argv: list[str] | None = None) -> int:
             codigo_python = traducir_archivo(args.archivo)
             salida = escribir_archivo_python(Path(args.salida), codigo_python)
             print(f"Archivo Python generado: {salida}")
+            return 0
+
+        if args.comando == "ia":
+            if args.accion_ia == "preguntar":
+                print(preguntar_ia(args.pregunta, modelo=args.modelo))
+                return 0
+            if args.accion_ia == "explicar":
+                print(explicar_archivo(args.archivo, modelo=args.modelo))
+                return 0
+            if args.accion_ia == "revisar":
+                print(revisar_archivo(args.archivo, modelo=args.modelo))
+                return 0
+            parser.parse_args(["ia", "--help"])
             return 0
     except Exception as error:  # noqa: BLE001 - CLI debe presentar cualquier error al usuario.
         print(formatear_error(error, getattr(args, "archivo", None)), file=sys.stderr)

@@ -25,6 +25,10 @@ classifiers = [
 [project.scripts]
 nython = "nython.cli:main"
 
+[project.optional-dependencies]
+dev = ["pytest"]
+ia = ["openai"]
+
 [tool.setuptools.packages.find]
 include = ["nython*"]
 
