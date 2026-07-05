@@ -1,0 +1,47 @@
+{
+  "name": "nython-vscode",
+  "displayName": "Ñython",
+  "description": "Soporte básico para archivos Ñython.",
+  "version": "0.1.0",
+  "publisher": "nython",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:nython",
+    "onCommand:nython.runCurrentFile"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "nython",
+        "aliases": [
+          "Ñython",
+          "Nython"
+        ],
+        "extensions": [
+          ".ny",
+          ".nython"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "nython",
+        "scopeName": "source.nython",
+        "path": "./syntaxes/nython.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "nython.runCurrentFile",
+        "title": "Ñython: Ejecutar archivo actual"
+      }
+    ]
+  }
+}

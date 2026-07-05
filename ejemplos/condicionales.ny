@@ -1,0 +1,6 @@
+edad = entero(entrada("Escribe tu edad: "))
+
+si edad >= 18:
+    imprimir("Eres mayor de edad")
+sino:
+    imprimir("Eres menor de edad")

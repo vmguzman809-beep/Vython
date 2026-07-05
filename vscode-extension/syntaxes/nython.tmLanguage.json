@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Ñython",
+  "scopeName": "source.nython",
+  "patterns": [
+    {
+      "name": "comment.line.number-sign.nython",
+      "match": "#.*$"
+    },
+    {
+      "name": "string.quoted.double.nython",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.nython",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single.nython",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.nython",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "keyword.control.nython",
+      "match": "\\b(si|sino|osi|para|mientras|en|definir|funcion|retornar|y|o|no|clase|importar|desde|como|intentar|excepto|finalmente|con|romper|continuar|pasar|global|no_local|afirmar|eliminar|lanzar|ceder|esperar|asincrono|lambda)\\b"
+    },
+    {
+      "name": "constant.language.nython",
+      "match": "\\b(verdadero|falso|nulo)\\b"
+    },
+    {
+      "name": "support.function.builtin.nython",
+      "match": "\\b(imprimir|entrada|rango|longitud|entero|decimal|texto|booleano|lista|tupla|conjunto|diccionario|enumerar|zippear|sumar|maximo|minimo|absoluto|redondear|ordenado|tipo|abrir)\\b"
+    },
+    {
+      "name": "constant.numeric.nython",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    }
+  ]
+}
