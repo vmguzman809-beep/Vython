@@ -9,7 +9,7 @@ from pathlib import Path
 from . import __version__
 from .ejecutor import ejecutar_archivo, traducir_archivo
 from .errores import formatear_error
-from .ia import explicar_archivo, preguntar_ia, revisar_archivo
+from .ia import estado_ia, explicar_archivo, preguntar_ia, revisar_archivo
 from .utilidades import escribir_archivo_python
 
 
@@ -36,14 +36,21 @@ def crear_parser() -> argparse.ArgumentParser:
     ia_preguntar = ia_subparsers.add_parser("preguntar", help="Pregunta libre al asistente IA")
     ia_preguntar.add_argument("pregunta")
     ia_preguntar.add_argument("--modelo")
+    ia_preguntar.add_argument("--proveedor", choices=["openai", "simulado"])
 
     ia_explicar = ia_subparsers.add_parser("explicar", help="Explica un archivo Nython")
     ia_explicar.add_argument("archivo")
     ia_explicar.add_argument("--modelo")
+    ia_explicar.add_argument("--proveedor", choices=["openai", "simulado"])
 
     ia_revisar = ia_subparsers.add_parser("revisar", help="Revisa un archivo Nython")
     ia_revisar.add_argument("archivo")
     ia_revisar.add_argument("--modelo")
+    ia_revisar.add_argument("--proveedor", choices=["openai", "simulado"])
+
+    ia_estado = ia_subparsers.add_parser("estado", help="Muestra la configuracion de IA")
+    ia_estado.add_argument("--modelo")
+    ia_estado.add_argument("--proveedor", choices=["openai", "simulado"])
 
     subparsers.add_parser("version", help="Muestra la version instalada")
     subparsers.add_parser("ayuda", help="Muestra esta ayuda")
@@ -79,13 +86,16 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.comando == "ia":
             if args.accion_ia == "preguntar":
-                print(preguntar_ia(args.pregunta, modelo=args.modelo))
+                print(preguntar_ia(args.pregunta, modelo=args.modelo, proveedor=args.proveedor))
                 return 0
             if args.accion_ia == "explicar":
-                print(explicar_archivo(args.archivo, modelo=args.modelo))
+                print(explicar_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
                 return 0
             if args.accion_ia == "revisar":
-                print(revisar_archivo(args.archivo, modelo=args.modelo))
+                print(revisar_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
+                return 0
+            if args.accion_ia == "estado":
+                print(estado_ia(modelo=args.modelo, proveedor=args.proveedor))
                 return 0
             parser.parse_args(["ia", "--help"])
             return 0

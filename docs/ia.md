@@ -36,12 +36,36 @@ setx NYTHON_IA_MODELO "gpt-5.5"
 nython ia preguntar "Explícame qué es una variable"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
+nython ia estado
+```
+
+## Modo simulado
+
+Para desarrollo, demos o pruebas sin credenciales puedes usar el proveedor simulado:
+
+```bash
+nython ia estado --proveedor simulado
+nython ia preguntar "Explícame una lista" --proveedor simulado
+nython ia explicar ejemplos/hola_mundo.ny --proveedor simulado
+```
+
+También puede configurarse por entorno:
+
+```bash
+setx NYTHON_IA_PROVEEDOR "simulado"
 ```
 
 ## Uso desde Ñython
 
 ```nython
 respuesta = preguntar_ia("Dame un ejemplo de una lista en Python")
+imprimir(respuesta)
+```
+
+Para usar el modo simulado desde un archivo:
+
+```nython
+respuesta = preguntar_ia("Dame una idea de ejercicio con listas", proveedor="simulado")
 imprimir(respuesta)
 ```
 
@@ -53,3 +77,4 @@ La IA vive en `nython/ia.py` y se conecta como una capa opcional:
 - Si falta `OPENAI_API_KEY`, Ñython muestra un error claro.
 - Si falta el extra `ia`, Ñython explica cómo instalarlo.
 - La CLI puede explicar o revisar archivos traduciendo primero el código Ñython a Python.
+- El proveedor `simulado` permite probar la experiencia sin internet, API key ni costo.

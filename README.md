@@ -12,7 +12,7 @@
 Código Ñython -> Traducción -> Código Python -> Ejecución
 ```
 
-Esto permite mantener compatibilidad con el ecosistema de Python y, al mismo tiempo, ofrecer una primera experiencia más cercana para estudiantes, docentes y desarrolladores hispanohablantes.
+Esto permite mantener compatibilidad con el ecosistema de Python y ofrecer una primera experiencia más cercana para estudiantes, docentes y desarrolladores hispanohablantes.
 
 ## Instalación
 
@@ -22,7 +22,19 @@ Requiere Python 3.10 o superior.
 pip install -e .
 ```
 
-## Uso básico
+Para desarrollo:
+
+```bash
+pip install -e ".[dev]"
+```
+
+Para usar IA:
+
+```bash
+pip install -e ".[ia]"
+```
+
+## Uso Básico
 
 ```bash
 nython ejecutar ejemplos/hola_mundo.ny
@@ -32,7 +44,7 @@ nython version
 nython ayuda
 ```
 
-## Ejemplos
+## Ejemplo
 
 ```nython
 nombre = entrada("Escribe tu nombre: ")
@@ -43,7 +55,7 @@ sino:
     imprimir("Hola " + nombre)
 ```
 
-Se traduce a:
+Python generado:
 
 ```python
 nombre = input("Escribe tu nombre: ")
@@ -54,7 +66,7 @@ else:
     print("Hola " + nombre)
 ```
 
-## Gramática natural inicial
+## Gramática Natural Inicial
 
 ```nython
 para cada persona en personas:
@@ -67,9 +79,7 @@ si edad esta entre 18 y 65:
     imprimir("Edad laboral")
 ```
 
-## Importar módulos `.ny`
-
-Un archivo Ñython puede importar otro módulo escrito en `.ny`:
+## Importar Módulos `.ny`
 
 ```nython
 desde matematicas importar multiplicar
@@ -80,17 +90,11 @@ imprimir(resultado)
 
 El importador de Ñython traduce el módulo `.ny` antes de cargarlo.
 
-## IA nativa opcional
+## IA Nativa Opcional
 
-Ñython puede integrar IA de forma nativa sin volverla obligatoria para el lenguaje.
+Ñython puede integrar IA sin volverla obligatoria para el lenguaje.
 
-Instala el extra:
-
-```bash
-pip install -e ".[ia]"
-```
-
-Configura tu clave:
+Configura tu clave para OpenAI:
 
 ```powershell
 setx OPENAI_API_KEY "tu_clave"
@@ -99,9 +103,17 @@ setx OPENAI_API_KEY "tu_clave"
 Usa la IA desde la CLI:
 
 ```bash
+nython ia estado
 nython ia preguntar "Explícame qué es un bucle"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
+```
+
+Para desarrollo, demos o pruebas sin credenciales:
+
+```bash
+nython ia estado --proveedor simulado
+nython ia preguntar "Explícame una lista" --proveedor simulado
 ```
 
 O desde un archivo `.ny`:
@@ -111,9 +123,9 @@ respuesta = preguntar_ia("Explícame qué hace range en Python")
 imprimir(respuesta)
 ```
 
-La integración usa la API de OpenAI cuando `OPENAI_API_KEY` está configurada. El resto de Ñython funciona sin IA, sin internet y sin credenciales.
+La integración usa OpenAI por defecto cuando `OPENAI_API_KEY` está configurada. El resto de Ñython funciona sin IA, sin internet y sin credenciales.
 
-## Equivalencias iniciales
+## Equivalencias Iniciales
 
 | Español | Python |
 | --- | --- |
@@ -143,7 +155,7 @@ La integración usa la API de OpenAI cuando `OPENAI_API_KEY` está configurada. 
 | continuar | continue |
 | pasar | pass |
 
-## Alias comunes
+## Alias Comunes
 
 | Español | Python |
 | --- | --- |
@@ -169,6 +181,7 @@ La integración usa la API de OpenAI cuando `OPENAI_API_KEY` está configurada. 
 | ordenado | sorted |
 | tipo | type |
 | abrir | open |
+| preguntar_ia | función IA opcional |
 
 ## Seguridad
 
@@ -214,18 +227,19 @@ vscode-extension/    base de extensión para VS Code
 - Ejecución con botón.
 - Snippets.
 
-### Fase 3 - Gramática natural avanzada
+### Fase 3 - IA Educativa
+
+- Tutor interactivo.
+- Explicación de errores con IA.
+- Generación guiada de ejercicios.
+- Proveedores intercambiables.
+
+### Fase 4 - Gramática Natural Avanzada
 
 - Más expresiones cercanas al español cotidiano.
 - Diagnósticos cuando una frase natural sea ambigua.
 
-### Fase 4 - Errores educativos
-
-- Sugerencias para principiantes.
-- Explicaciones simples.
-- Contexto alrededor de la línea con error.
-
-### Fase 5 - Distribución educativa
+### Fase 5 - Distribución Educativa
 
 - Documentación completa.
 - Curso básico.
