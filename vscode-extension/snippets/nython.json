@@ -1,0 +1,34 @@
+{
+  "Condicional": {
+    "prefix": "si",
+    "body": [
+      "si ${1:condicion}:",
+      "    ${2:imprimir(\"ok\")}"
+    ],
+    "description": "Bloque condicional si"
+  },
+  "Bucle Para": {
+    "prefix": "para",
+    "body": [
+      "para ${1:elemento} en ${2:coleccion}:",
+      "    ${3:imprimir($1)}"
+    ],
+    "description": "Bucle para"
+  },
+  "Funcion": {
+    "prefix": "funcion",
+    "body": [
+      "funcion ${1:nombre}(${2:parametro}):",
+      "    retornar ${3:valor}"
+    ],
+    "description": "Declarar funcion"
+  },
+  "Repetir": {
+    "prefix": "repetir",
+    "body": [
+      "repetir ${1:3} veces:",
+      "    ${2:imprimir(\"Hola\")}"
+    ],
+    "description": "Repetir N veces"
+  }
+}

@@ -36,6 +36,9 @@ setx NYTHON_IA_MODELO "gpt-5.5"
 nython ia preguntar "Explícame qué es una variable"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
+nython ia explicar-error ejemplos/error_nombre.ny
+nython ia generar-ejercicio listas --nivel principiante
+nython ia convertir-python programa.py
 nython ia estado
 ```
 

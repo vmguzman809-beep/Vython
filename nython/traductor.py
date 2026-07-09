@@ -5,10 +5,9 @@ from __future__ import annotations
 import io
 import re
 import tokenize
-from token import NAME
+from token import NAME, STRING
 
 from .alias import ALIAS_FUNCIONES
-
 
 PALABRAS_CLAVE: dict[str, str] = {
     "si": "if",
@@ -100,25 +99,55 @@ def traducir_codigo(codigo: str) -> str:
 
 
 def aplicar_reglas_naturales(codigo: str) -> str:
-    """Aplica reglas de sintaxis natural antes de traducir tokens."""
+    """Aplica reglas de sintaxis natural antes de traducir tokens.
 
-    return "\n".join(_traducir_linea_natural(linea) for linea in codigo.splitlines())
+    Las reglas se aplican por linea, pero se saltan lineas cubiertas por strings
+    multilínea para no modificar texto educativo o plantillas dentro de comillas.
+    """
+
+    lineas_protegidas = _lineas_en_strings_multilinea(codigo)
+    traducidas: list[str] = []
+    for numero, linea in enumerate(codigo.splitlines(keepends=True), start=1):
+        if numero in lineas_protegidas:
+            traducidas.append(linea)
+        else:
+            traducidas.append(_traducir_linea_natural(linea))
+    return "".join(traducidas)
 
 
 def _traducir_linea_natural(linea: str) -> str:
-    if coincidencia := PATRON_PARA_CADA.match(linea):
-        grupos = coincidencia.groupdict()
-        return f"{grupos['indent']}para {grupos['var']} en {grupos['iterable']}:"
+    salto = ""
+    cuerpo = linea
+    if linea.endswith("\r\n"):
+        cuerpo, salto = linea[:-2], "\r\n"
+    elif linea.endswith("\n"):
+        cuerpo, salto = linea[:-1], "\n"
 
-    if coincidencia := PATRON_REPETIR.match(linea):
+    if coincidencia := PATRON_PARA_CADA.match(cuerpo):
         grupos = coincidencia.groupdict()
-        return f"{grupos['indent']}para _ en rango({grupos['veces']}):"
+        return f"{grupos['indent']}para {grupos['var']} en {grupos['iterable']}:{salto}"
 
-    if coincidencia := PATRON_ESTA_ENTRE.match(linea):
+    if coincidencia := PATRON_REPETIR.match(cuerpo):
         grupos = coincidencia.groupdict()
-        return f"{grupos['indent']}si {grupos['minimo']} <= {grupos['valor']} <= {grupos['maximo']}:"
+        return f"{grupos['indent']}para _ en rango({grupos['veces']}):{salto}"
+
+    if coincidencia := PATRON_ESTA_ENTRE.match(cuerpo):
+        grupos = coincidencia.groupdict()
+        return f"{grupos['indent']}si {grupos['minimo']} <= {grupos['valor']} <= {grupos['maximo']}:{salto}"
 
     return linea
+
+
+def _lineas_en_strings_multilinea(codigo: str) -> set[int]:
+    protegidas: set[int] = set()
+    try:
+        tokens = tokenize.generate_tokens(io.StringIO(codigo).readline)
+        for token in tokens:
+            if token.type == STRING and token.start[0] != token.end[0]:
+                protegidas.update(range(token.start[0], token.end[0] + 1))
+    except tokenize.TokenError:
+        return protegidas
+    return protegidas
 
 
 def obtener_tabla_traducciones() -> dict[str, str]:

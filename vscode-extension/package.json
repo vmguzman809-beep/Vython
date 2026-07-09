@@ -12,7 +12,9 @@
   ],
   "activationEvents": [
     "onLanguage:nython",
-    "onCommand:nython.runCurrentFile"
+    "onCommand:nython.runCurrentFile",
+    "onCommand:nython.translateCurrentFile",
+    "onCommand:nython.compileCurrentFile"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -41,6 +43,20 @@
       {
         "command": "nython.runCurrentFile",
         "title": "Ñython: Ejecutar archivo actual"
+      },
+      {
+        "command": "nython.translateCurrentFile",
+        "title": "Ñython: Traducir archivo actual"
+      },
+      {
+        "command": "nython.compileCurrentFile",
+        "title": "Ñython: Compilar archivo actual"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "nython",
+        "path": "./snippets/nython.json"
       }
     ]
   }

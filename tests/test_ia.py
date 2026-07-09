@@ -2,9 +2,14 @@ import pytest
 
 from nython.ia import (
     NythonIAError,
+    convertir_python,
+    crear_prompt_conversion_python,
+    crear_prompt_ejercicio,
+    crear_prompt_error,
     crear_prompt_explicacion,
     crear_prompt_revision,
     estado_ia,
+    generar_ejercicio,
     ia_disponible,
     leer_configuracion_ia,
     obtener_proveedor,
@@ -75,3 +80,32 @@ def test_prompt_revision_incluye_contexto_de_tutor() -> None:
 
     assert "tutor" in prompt
     assert "Python generado" in prompt
+
+
+def test_prompt_error_incluye_codigo_y_error() -> None:
+    prompt = crear_prompt_error('imprimir(valor)', "print(valor)", "Nombre no definido")
+
+    assert "Explica este error" in prompt
+    assert "Nombre no definido" in prompt
+
+
+def test_generar_ejercicio_usa_proveedor_simulado() -> None:
+    respuesta = generar_ejercicio("listas", proveedor="simulado")
+
+    assert "[IA simulada]" in respuesta
+    assert "listas" in respuesta
+
+
+def test_convertir_python_usa_archivo(tmp_path) -> None:
+    archivo = tmp_path / "programa.py"
+    archivo.write_text('print("hola")\n', encoding="utf-8")
+
+    respuesta = convertir_python(archivo, proveedor="simulado")
+
+    assert "[IA simulada]" in respuesta
+    assert "print" in respuesta
+
+
+def test_prompts_nuevos_son_educativos() -> None:
+    assert "ejercicio educativo" in crear_prompt_ejercicio("bucles")
+    assert "Convierte este codigo Python" in crear_prompt_conversion_python("print('hola')")

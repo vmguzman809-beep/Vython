@@ -1,5 +1,7 @@
 # Ñython
 
+[![Tests](https://github.com/vmguzman809-beep/Vython/actions/workflows/tests.yml/badge.svg)](https://github.com/vmguzman809-beep/Vython/actions/workflows/tests.yml)
+
 **Programa en español. Ejecuta en Python.**
 
 Ñython es una herramienta educativa para escribir código con sintaxis en español y ejecutarlo como Python real. No busca reemplazar Python. Busca acercar Python a millones de hispanohablantes que están aprendiendo a programar.
@@ -107,6 +109,9 @@ nython ia estado
 nython ia preguntar "Explícame qué es un bucle"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
+nython ia explicar-error ejemplos/error_nombre.ny
+nython ia generar-ejercicio listas --nivel principiante
+nython ia convertir-python programa.py
 ```
 
 Para desarrollo, demos o pruebas sin credenciales:
@@ -124,6 +129,8 @@ imprimir(respuesta)
 ```
 
 La integración usa OpenAI por defecto cuando `OPENAI_API_KEY` está configurada. El resto de Ñython funciona sin IA, sin internet y sin credenciales.
+
+Consulta [Privacidad e IA](docs/privacidad-ia.md) antes de enviar código a un proveedor externo.
 
 ## Equivalencias Iniciales
 
@@ -193,6 +200,9 @@ Esta primera versión no implementa un sandbox de seguridad.
 
 ```bash
 pytest
+ruff check .
+coverage run -m pytest
+coverage report
 ```
 
 ## Estructura
@@ -223,9 +233,9 @@ vscode-extension/    base de extensión para VS Code
 
 - Extensión completa.
 - Resaltado.
-- Autocompletado.
+- Snippets iniciales.
 - Ejecución con botón.
-- Snippets.
+- Comandos para ejecutar, traducir y compilar.
 
 ### Fase 3 - IA Educativa
 
@@ -233,6 +243,7 @@ vscode-extension/    base de extensión para VS Code
 - Explicación de errores con IA.
 - Generación guiada de ejercicios.
 - Proveedores intercambiables.
+- Conversión asistida de Python a Ñython.
 
 ### Fase 4 - Gramática Natural Avanzada
 

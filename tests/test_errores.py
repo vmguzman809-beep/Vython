@@ -15,6 +15,18 @@ def test_formatea_error_en_espanol() -> None:
     assert "Archivo: programa.ny" in mensaje
 
 
+def test_formatea_error_con_contexto_de_archivo(tmp_path) -> None:
+    archivo = tmp_path / "programa.ny"
+    linea = "si verdadero\n"
+    archivo.write_text(linea, encoding="utf-8")
+    error = SyntaxError("expected ':'", (str(archivo), 1, 13, linea))
+
+    mensaje = formatear_error(error, archivo)
+
+    assert "Codigo: si verdadero" in mensaje
+    assert "^" in mensaje
+
+
 def test_indentation_error_usa_nombre_especifico() -> None:
     mensaje = formatear_error(IndentationError("indentacion"), "programa.ny")
 

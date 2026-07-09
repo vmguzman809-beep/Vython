@@ -28,3 +28,18 @@ def test_importa_modulo_nython(tmp_path: Path, capsys) -> None:
     ejecutar_archivo(programa)
 
     assert capsys.readouterr().out.strip() == "8"
+
+
+def test_importa_paquete_nython(tmp_path: Path, capsys) -> None:
+    paquete = tmp_path / "herramientas"
+    paquete.mkdir()
+    (paquete / "__init__.ny").write_text(
+        "funcion triplicar(valor):\n    retornar valor * 3\n",
+        encoding="utf-8",
+    )
+    programa = tmp_path / "programa.ny"
+    programa.write_text("desde herramientas importar triplicar\nimprimir(triplicar(3))\n", encoding="utf-8")
+
+    ejecutar_archivo(programa)
+
+    assert capsys.readouterr().out.strip() == "9"

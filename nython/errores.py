@@ -5,7 +5,6 @@ from __future__ import annotations
 import traceback
 from pathlib import Path
 
-
 TIPOS_ERROR: dict[type[BaseException], str] = {
     IndentationError: "Error de indentacion",
     ModuleNotFoundError: "Modulo no encontrado",
@@ -72,17 +71,23 @@ def formatear_error(error: BaseException, archivo: str | Path | None = None) -> 
     archivo_texto = str(archivo) if archivo else obtener_archivo_error(error)
     linea = obtener_linea_error(error)
     linea_texto = str(linea) if linea is not None else "desconocida"
+    contexto = obtener_contexto_error(error, archivo_texto, linea)
 
-    return "\n".join(
+    partes = [
+        "Error en Nython:",
+        f"Tipo: {nombre_error(error)}",
+        f"Archivo: {archivo_texto}",
+        f"Linea: {linea_texto}",
+    ]
+    if contexto:
+        partes.append(contexto)
+    partes.extend(
         [
-            "Error en Nython:",
-            f"Tipo: {nombre_error(error)}",
-            f"Archivo: {archivo_texto}",
-            f"Linea: {linea_texto}",
             f"Detalle: {error}",
             f"Sugerencia: {sugerencia_para(error)}",
         ]
     )
+    return "\n".join(partes)
 
 
 def obtener_archivo_error(error: BaseException) -> str:
@@ -93,3 +98,29 @@ def obtener_archivo_error(error: BaseException) -> str:
 
     tb = traceback.extract_tb(error.__traceback__) if error.__traceback__ else []
     return tb[-1].filename if tb else "desconocido"
+
+
+def obtener_contexto_error(error: BaseException, archivo: str, linea: int | None) -> str:
+    texto = None
+    posicion = None
+
+    if isinstance(error, SyntaxError) and error.text:
+        texto = error.text.rstrip("\n")
+        posicion = error.offset
+    elif linea is not None:
+        path = Path(archivo)
+        if path.is_file():
+            try:
+                lineas = path.read_text(encoding="utf-8").splitlines()
+            except OSError:
+                lineas = []
+            if 1 <= linea <= len(lineas):
+                texto = lineas[linea - 1]
+
+    if not texto:
+        return ""
+
+    resultado = [f"Codigo: {texto}"]
+    if posicion and posicion > 0:
+        resultado.append("        " + " " * (posicion - 1) + "^")
+    return "\n".join(resultado)

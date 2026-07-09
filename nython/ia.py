@@ -10,7 +10,6 @@ from typing import Protocol
 from .traductor import traducir_codigo
 from .utilidades import leer_archivo_nython
 
-
 MODELO_PREDETERMINADO = "gpt-5.5"
 PROVEEDOR_PREDETERMINADO = "openai"
 
@@ -179,6 +178,49 @@ def crear_prompt_revision(codigo_nython: str, codigo_python: str) -> str:
     )
 
 
+def crear_prompt_error(codigo_nython: str, codigo_python: str | None, error_formateado: str) -> str:
+    partes = [
+        "Explica este error de Nython para una persona principiante.",
+        "Incluye la causa probable, como corregirlo y una version pequena corregida si aplica.",
+        "",
+        "Codigo Nython:",
+        "```nython",
+        codigo_nython,
+        "```",
+        "",
+    ]
+    if codigo_python:
+        partes.extend(["Python generado:", "```python", codigo_python, "```", ""])
+    partes.extend(["Error:", "```text", error_formateado, "```"])
+    return "\n".join(partes)
+
+
+def crear_prompt_ejercicio(tema: str, nivel: str = "principiante") -> str:
+    return "\n".join(
+        [
+            "Crea un ejercicio educativo en Nython.",
+            f"Tema: {tema}",
+            f"Nivel: {nivel}",
+            "Incluye objetivo, enunciado, pistas, codigo inicial y solucion esperada.",
+            "Usa sintaxis Nython y explica brevemente el equivalente en Python.",
+        ]
+    )
+
+
+def crear_prompt_conversion_python(codigo_python: str) -> str:
+    return "\n".join(
+        [
+            "Convierte este codigo Python a Nython.",
+            "Mantén la estructura y explica cualquier decision relevante.",
+            "",
+            "Codigo Python:",
+            "```python",
+            codigo_python,
+            "```",
+        ]
+    )
+
+
 def explicar_archivo(
     ruta: str | Path,
     *,
@@ -204,6 +246,58 @@ def revisar_archivo(
     codigo_python = traducir_codigo(codigo_nython)
     return preguntar_ia(
         crear_prompt_revision(codigo_nython, codigo_python),
+        modelo=modelo,
+        proveedor=proveedor,
+    )
+
+
+def explicar_error_archivo(
+    ruta: str | Path,
+    *,
+    modelo: str | None = None,
+    proveedor: str | None = None,
+) -> str:
+    from .ejecutor import ejecutar_archivo
+    from .errores import formatear_error
+
+    codigo_nython = leer_archivo_nython(ruta)
+    codigo_python = None
+    try:
+        codigo_python = traducir_codigo(codigo_nython)
+        ejecutar_archivo(ruta)
+    except Exception as error:  # noqa: BLE001 - se convierte en prompt educativo.
+        error_formateado = formatear_error(error, ruta)
+        return preguntar_ia(
+            crear_prompt_error(codigo_nython, codigo_python, error_formateado),
+            modelo=modelo,
+            proveedor=proveedor,
+        )
+    raise NythonIAError("El archivo se ejecuto sin errores. No hay error que explicar.")
+
+
+def generar_ejercicio(
+    tema: str,
+    *,
+    nivel: str = "principiante",
+    modelo: str | None = None,
+    proveedor: str | None = None,
+) -> str:
+    return preguntar_ia(
+        crear_prompt_ejercicio(tema, nivel=nivel),
+        modelo=modelo,
+        proveedor=proveedor,
+    )
+
+
+def convertir_python(
+    ruta: str | Path,
+    *,
+    modelo: str | None = None,
+    proveedor: str | None = None,
+) -> str:
+    codigo_python = Path(ruta).read_text(encoding="utf-8")
+    return preguntar_ia(
+        crear_prompt_conversion_python(codigo_python),
         modelo=modelo,
         proveedor=proveedor,
     )

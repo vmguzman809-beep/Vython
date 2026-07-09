@@ -9,7 +9,15 @@ from pathlib import Path
 from . import __version__
 from .ejecutor import ejecutar_archivo, traducir_archivo
 from .errores import formatear_error
-from .ia import estado_ia, explicar_archivo, preguntar_ia, revisar_archivo
+from .ia import (
+    convertir_python,
+    estado_ia,
+    explicar_archivo,
+    explicar_error_archivo,
+    generar_ejercicio,
+    preguntar_ia,
+    revisar_archivo,
+)
 from .utilidades import escribir_archivo_python
 
 
@@ -47,6 +55,22 @@ def crear_parser() -> argparse.ArgumentParser:
     ia_revisar.add_argument("archivo")
     ia_revisar.add_argument("--modelo")
     ia_revisar.add_argument("--proveedor", choices=["openai", "simulado"])
+
+    ia_error = ia_subparsers.add_parser("explicar-error", help="Explica el error de un archivo Nython")
+    ia_error.add_argument("archivo")
+    ia_error.add_argument("--modelo")
+    ia_error.add_argument("--proveedor", choices=["openai", "simulado"])
+
+    ia_ejercicio = ia_subparsers.add_parser("generar-ejercicio", help="Genera un ejercicio educativo")
+    ia_ejercicio.add_argument("tema")
+    ia_ejercicio.add_argument("--nivel", default="principiante")
+    ia_ejercicio.add_argument("--modelo")
+    ia_ejercicio.add_argument("--proveedor", choices=["openai", "simulado"])
+
+    ia_convertir = ia_subparsers.add_parser("convertir-python", help="Convierte un archivo Python a Nython")
+    ia_convertir.add_argument("archivo")
+    ia_convertir.add_argument("--modelo")
+    ia_convertir.add_argument("--proveedor", choices=["openai", "simulado"])
 
     ia_estado = ia_subparsers.add_parser("estado", help="Muestra la configuracion de IA")
     ia_estado.add_argument("--modelo")
@@ -93,6 +117,22 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             if args.accion_ia == "revisar":
                 print(revisar_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
+                return 0
+            if args.accion_ia == "explicar-error":
+                print(explicar_error_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
+                return 0
+            if args.accion_ia == "generar-ejercicio":
+                print(
+                    generar_ejercicio(
+                        args.tema,
+                        nivel=args.nivel,
+                        modelo=args.modelo,
+                        proveedor=args.proveedor,
+                    )
+                )
+                return 0
+            if args.accion_ia == "convertir-python":
+                print(convertir_python(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
                 return 0
             if args.accion_ia == "estado":
                 print(estado_ia(modelo=args.modelo, proveedor=args.proveedor))

@@ -43,6 +43,21 @@ def test_no_modifica_strings() -> None:
     assert normalizar(traducir_codigo(codigo)) == 'print("si sino para")'
 
 
+def test_no_aplica_reglas_naturales_en_strings_multilinea() -> None:
+    codigo = '''texto_largo = """
+para cada persona en personas:
+repetir 3 veces:
+"""
+imprimir(texto_largo)
+'''
+
+    traducido = traducir_codigo(codigo)
+
+    assert "para cada persona en personas:" in traducido
+    assert "repetir 3 veces:" in traducido
+    assert "for persona" not in traducido
+
+
 def test_traduce_bucle_para_en_rango() -> None:
     codigo = """para numero en rango(1, 3):
     imprimir(numero)

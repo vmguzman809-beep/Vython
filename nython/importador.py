@@ -9,20 +9,23 @@ from pathlib import Path
 
 from .traductor import traducir_codigo
 
-
 EXTENSIONES_NYTHON = (".ny", ".nython")
 
 
 class NythonLoader(importlib.abc.SourceLoader):
-    def __init__(self, fullname: str, path: Path) -> None:
+    def __init__(self, fullname: str, path: Path, es_paquete: bool = False) -> None:
         self.fullname = fullname
         self.path = path
+        self.es_paquete = es_paquete
 
     def get_filename(self, fullname: str) -> str:
         return str(self.path)
 
     def get_data(self, path: str) -> bytes:
         return Path(path).read_bytes()
+
+    def is_package(self, fullname: str) -> bool:
+        return self.es_paquete
 
     def source_to_code(self, data: bytes, path: str, *, _optimize: int = -1):
         codigo_nython = data.decode("utf-8")
@@ -44,6 +47,18 @@ class NythonFinder(importlib.abc.MetaPathFinder):
                 if candidato.is_file():
                     loader = NythonLoader(fullname, candidato)
                     return importlib.machinery.ModuleSpec(fullname, loader, origin=str(candidato))
+
+                paquete = base / nombre_modulo / f"__init__{extension}"
+                if paquete.is_file():
+                    loader = NythonLoader(fullname, paquete, es_paquete=True)
+                    spec = importlib.machinery.ModuleSpec(
+                        fullname,
+                        loader,
+                        origin=str(paquete),
+                        is_package=True,
+                    )
+                    spec.submodule_search_locations = [str(paquete.parent)]
+                    return spec
 
         return None
 

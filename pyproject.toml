@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nython"
-version = "0.1.0"
+version = "0.2.0"
 description = "Programa en espanol. Ejecuta en Python."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,11 +22,17 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 
+[project.urls]
+Homepage = "https://github.com/vmguzman809-beep/Vython"
+Repository = "https://github.com/vmguzman809-beep/Vython"
+Issues = "https://github.com/vmguzman809-beep/Vython/issues"
+Documentation = "https://github.com/vmguzman809-beep/Vython/tree/main/docs"
+
 [project.scripts]
 nython = "nython.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["coverage[toml]", "pytest", "ruff"]
 ia = ["openai"]
 
 [tool.setuptools.packages.find]
@@ -35,3 +41,18 @@ include = ["nython*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B904"]
+
+[tool.coverage.run]
+source = ["nython"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

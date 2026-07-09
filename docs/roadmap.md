@@ -12,9 +12,16 @@
 ## Fase 2 - VS Code
 
 - Resaltado completo.
-- Autocompletado.
 - Snippets.
-- Ejecución con botón.
+- Comandos para ejecutar, traducir y compilar.
+- Autocompletado.
+
+## Fase 3 - IA educativa
+
+- Tutor interactivo.
+- Explicación de errores con IA.
+- Generación guiada de ejercicios.
+- Conversión asistida de Python a Ñython.
 
 ## Fase 3 - Gramática natural
 
