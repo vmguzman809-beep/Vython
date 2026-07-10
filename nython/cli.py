@@ -60,6 +60,11 @@ def crear_parser() -> argparse.ArgumentParser:
     ia_error.add_argument("archivo")
     ia_error.add_argument("--modelo")
     ia_error.add_argument("--proveedor", choices=["openai", "simulado"])
+    ia_error.add_argument(
+        "--ejecutar",
+        action="store_true",
+        help="Ejecuta el archivo para capturar errores en tiempo de ejecucion.",
+    )
 
     ia_ejercicio = ia_subparsers.add_parser("generar-ejercicio", help="Genera un ejercicio educativo")
     ia_ejercicio.add_argument("tema")
@@ -119,7 +124,14 @@ def main(argv: list[str] | None = None) -> int:
                 print(revisar_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
                 return 0
             if args.accion_ia == "explicar-error":
-                print(explicar_error_archivo(args.archivo, modelo=args.modelo, proveedor=args.proveedor))
+                print(
+                    explicar_error_archivo(
+                        args.archivo,
+                        modelo=args.modelo,
+                        proveedor=args.proveedor,
+                        ejecutar=args.ejecutar,
+                    )
+                )
                 return 0
             if args.accion_ia == "generar-ejercicio":
                 print(

@@ -4,6 +4,12 @@
   "description": "Soporte básico para archivos Ñython.",
   "version": "0.1.0",
   "publisher": "nython",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vmguzman809-beep/Vython.git",
+    "directory": "vscode-extension"
+  },
   "engines": {
     "vscode": "^1.90.0"
   },

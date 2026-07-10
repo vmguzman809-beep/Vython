@@ -1,0 +1,17 @@
+site_name: Ñython
+site_description: Programa en español. Ejecuta en Python.
+repo_url: https://github.com/vmguzman809-beep/Vython
+theme:
+  name: readthedocs
+nav:
+  - Inicio: introduccion.md
+  - Instalación: instalacion.md
+  - Sintaxis: sintaxis.md
+  - Gramática natural: gramatica-natural.md
+  - Ejemplos: ejemplos.md
+  - Importación: importacion.md
+  - IA: ia.md
+  - Privacidad IA: privacidad-ia.md
+  - VS Code: vscode.md
+  - Calidad: calidad.md
+  - Roadmap: roadmap.md

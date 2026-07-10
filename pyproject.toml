@@ -32,7 +32,7 @@ Documentation = "https://github.com/vmguzman809-beep/Vython/tree/main/docs"
 nython = "nython.cli:main"
 
 [project.optional-dependencies]
-dev = ["coverage[toml]", "pytest", "ruff"]
+dev = ["build", "coverage[toml]", "mkdocs", "pytest", "ruff", "twine"]
 ia = ["openai"]
 
 [tool.setuptools.packages.find]

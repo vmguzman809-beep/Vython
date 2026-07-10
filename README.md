@@ -110,6 +110,7 @@ nython ia preguntar "Explícame qué es un bucle"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
 nython ia explicar-error ejemplos/error_nombre.ny
+nython ia explicar-error ejemplos/error_nombre.ny --ejecutar
 nython ia generar-ejercicio listas --nivel principiante
 nython ia convertir-python programa.py
 ```
@@ -131,6 +132,8 @@ imprimir(respuesta)
 La integración usa OpenAI por defecto cuando `OPENAI_API_KEY` está configurada. El resto de Ñython funciona sin IA, sin internet y sin credenciales.
 
 Consulta [Privacidad e IA](docs/privacidad-ia.md) antes de enviar código a un proveedor externo.
+
+`explicar-error` no ejecuta el programa por defecto; usa `--ejecutar` solo para errores en tiempo de ejecución.
 
 ## Equivalencias Iniciales
 

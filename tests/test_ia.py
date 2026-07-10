@@ -9,6 +9,7 @@ from nython.ia import (
     crear_prompt_explicacion,
     crear_prompt_revision,
     estado_ia,
+    explicar_error_archivo,
     generar_ejercicio,
     ia_disponible,
     leer_configuracion_ia,
@@ -109,3 +110,31 @@ def test_convertir_python_usa_archivo(tmp_path) -> None:
 def test_prompts_nuevos_son_educativos() -> None:
     assert "ejercicio educativo" in crear_prompt_ejercicio("bucles")
     assert "Convierte este codigo Python" in crear_prompt_conversion_python("print('hola')")
+
+
+def test_explicar_error_archivo_no_ejecuta_por_defecto(tmp_path) -> None:
+    archivo = tmp_path / "programa.ny"
+    archivo.write_text('entrada("No debe pedir input: ")\n', encoding="utf-8")
+
+    with pytest.raises(NythonIAError, match="tradujo y compilo"):
+        explicar_error_archivo(archivo, proveedor="simulado")
+
+
+def test_explicar_error_archivo_detecta_syntax_error(tmp_path) -> None:
+    archivo = tmp_path / "programa.ny"
+    archivo.write_text("si verdadero\n    imprimir('hola')\n", encoding="utf-8")
+
+    respuesta = explicar_error_archivo(archivo, proveedor="simulado")
+
+    assert "[IA simulada]" in respuesta
+    assert "Error de sintaxis" in respuesta
+
+
+def test_explicar_error_archivo_puede_ejecutar_runtime_error(tmp_path) -> None:
+    archivo = tmp_path / "programa.ny"
+    archivo.write_text("imprimir(valor)\n", encoding="utf-8")
+
+    respuesta = explicar_error_archivo(archivo, proveedor="simulado", ejecutar=True)
+
+    assert "[IA simulada]" in respuesta
+    assert "Nombre no definido" in respuesta

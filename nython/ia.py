@@ -64,7 +64,7 @@ class ProveedorSimulado:
     nombre = "simulado"
 
     def generar(self, prompt: str, *, instrucciones: str, modelo: str) -> str:
-        resumen = " ".join(prompt.split())[:180]
+        resumen = " ".join(prompt.split())[:1000]
         return (
             "[IA simulada]\n"
             f"Modelo: {modelo}\n"
@@ -256,15 +256,19 @@ def explicar_error_archivo(
     *,
     modelo: str | None = None,
     proveedor: str | None = None,
+    ejecutar: bool = False,
 ) -> str:
-    from .ejecutor import ejecutar_archivo
     from .errores import formatear_error
 
     codigo_nython = leer_archivo_nython(ruta)
     codigo_python = None
     try:
         codigo_python = traducir_codigo(codigo_nython)
-        ejecutar_archivo(ruta)
+        compile(codigo_python, str(ruta), "exec")
+        if ejecutar:
+            from .ejecutor import ejecutar_archivo
+
+            ejecutar_archivo(ruta)
     except Exception as error:  # noqa: BLE001 - se convierte en prompt educativo.
         error_formateado = formatear_error(error, ruta)
         return preguntar_ia(
@@ -272,7 +276,12 @@ def explicar_error_archivo(
             modelo=modelo,
             proveedor=proveedor,
         )
-    raise NythonIAError("El archivo se ejecuto sin errores. No hay error que explicar.")
+    detalle = (
+        "El archivo se ejecuto sin errores."
+        if ejecutar
+        else "El archivo se tradujo y compilo sin errores."
+    )
+    raise NythonIAError(f"{detalle} No hay error que explicar.")
 
 
 def generar_ejercicio(

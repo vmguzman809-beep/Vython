@@ -10,5 +10,7 @@ htmlcov/
 venv/
 dist/
 build/
+site/
+vscode-extension/*.vsix
 funciones.py
 promt-*.txt

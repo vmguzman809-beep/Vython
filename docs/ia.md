@@ -37,6 +37,7 @@ nython ia preguntar "Explícame qué es una variable"
 nython ia explicar ejemplos/condicionales.ny
 nython ia revisar ejemplos/funciones.ny
 nython ia explicar-error ejemplos/error_nombre.ny
+nython ia explicar-error ejemplos/error_nombre.ny --ejecutar
 nython ia generar-ejercicio listas --nivel principiante
 nython ia convertir-python programa.py
 nython ia estado
@@ -56,6 +57,16 @@ También puede configurarse por entorno:
 
 ```bash
 setx NYTHON_IA_PROVEEDOR "simulado"
+```
+
+## Explicar errores sin efectos secundarios
+
+`nython ia explicar-error` traduce y compila el archivo por defecto, pero no lo ejecuta. Esto evita que se disparen llamadas a `entrada()`, escritura de archivos u otros efectos secundarios.
+
+Usa `--ejecutar` solo cuando quieras capturar errores en tiempo de ejecución:
+
+```bash
+nython ia explicar-error ejemplos/error_nombre.ny --ejecutar --proveedor simulado
 ```
 
 ## Uso desde Ñython
